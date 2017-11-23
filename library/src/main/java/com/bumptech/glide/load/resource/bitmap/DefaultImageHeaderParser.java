@@ -78,6 +78,7 @@ public final class DefaultImageHeaderParser implements ImageHeaderParser {
         Preconditions.checkNotNull(byteArrayPool));
   }
 
+  //wsq 获取图片类型
   private ImageType getType(Reader reader) throws IOException {
     int firstTwoBytes = reader.getUInt16();
 

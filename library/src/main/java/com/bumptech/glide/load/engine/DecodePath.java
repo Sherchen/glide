@@ -63,6 +63,7 @@ public class DecodePath<DataType, ResourceType, Transcode> {
       ResourceDecoder<DataType, ResourceType> decoder = decoders.get(i);
       try {
         DataType data = rewinder.rewindAndGet();
+        //wsq 判断decoder是否接受data
         if (decoder.handles(data, options)) {
           data = rewinder.rewindAndGet();
           result = decoder.decode(data, width, height, options);

@@ -574,6 +574,7 @@ public class RequestBuilder<TranscodeType> implements Cloneable {
 
     requestManager.clear(target);
     target.setRequest(request);
+    //wsq RequestManager开始启动request
     requestManager.track(target, request);
 
     return target;
@@ -820,6 +821,7 @@ public class RequestBuilder<TranscodeType> implements Cloneable {
     }
 
     Request mainRequest =
+            //wsq 创建thumbnail的request
         buildThumbnailRequestRecursive(
             target,
             targetListener,
@@ -831,6 +833,7 @@ public class RequestBuilder<TranscodeType> implements Cloneable {
             requestOptions);
 
     if (errorRequestCoordinator == null) {
+      //wsq 如果没有设置error,那么直接返回
       return mainRequest;
     }
 
@@ -842,6 +845,7 @@ public class RequestBuilder<TranscodeType> implements Cloneable {
       errorOverrideHeight = requestOptions.getOverrideHeight();
     }
 
+    //wsq 创建error的request
     Request errorRequest = errorBuilder.buildRequestRecursive(
         target,
         targetListener,

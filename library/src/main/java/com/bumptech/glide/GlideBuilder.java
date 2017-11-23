@@ -36,6 +36,7 @@ public final class GlideBuilder {
   private BitmapPool bitmapPool;
   private ArrayPool arrayPool;
   private MemoryCache memoryCache;
+  //wsq 初始化这几个线程池，以供后面调用
   private GlideExecutor sourceExecutor;
   private GlideExecutor diskCacheExecutor;
   private DiskCache.Factory diskCacheFactory;
@@ -290,6 +291,7 @@ public final class GlideBuilder {
     return this;
   }
 
+  //wsq 这一步是最重要的，很多东西都是在这里初始化
   public Glide build(Context context) {
     if (sourceExecutor == null) {
       sourceExecutor = GlideExecutor.newSourceExecutor();

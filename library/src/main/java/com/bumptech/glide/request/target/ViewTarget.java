@@ -344,10 +344,12 @@ public abstract class ViewTarget<T extends View, Z> extends BaseTarget<Z> {
       // We want to notify callbacks in the order they were added and we only expect one or two
       // callbacks to be added a time, so a List is a reasonable choice.
       if (!cbs.contains(cb)) {
+        //wsq 获取到宽高之后再回调通知
         cbs.add(cb);
       }
       if (layoutListener == null) {
         ViewTreeObserver observer = view.getViewTreeObserver();
+        //wsq 通过注册监听ViewTreeObserver来获取view的宽高
         layoutListener = new SizeDeterminerLayoutListener(this);
         observer.addOnPreDrawListener(layoutListener);
       }

@@ -247,6 +247,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>,
   public void onResourceReady(Resource<R> resource, DataSource dataSource) {
     this.resource = resource;
     this.dataSource = dataSource;
+    //wsq 任务准备，发送handler消息
     MAIN_THREAD_HANDLER.obtainMessage(MSG_COMPLETE, this).sendToTarget();
   }
 

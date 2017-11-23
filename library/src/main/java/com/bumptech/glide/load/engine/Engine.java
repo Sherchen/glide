@@ -134,6 +134,7 @@ public class Engine implements EngineJobListener,
    * @param height The target height in pixels of the desired resource.
    * @param cb     The callback that will be called when the load completes.
    */
+  //wsq 这一步是加载数据，非常重要
   public <R> LoadStatus load(
       GlideContext glideContext,
       Object model,
@@ -159,6 +160,7 @@ public class Engine implements EngineJobListener,
     EngineKey key = keyFactory.buildKey(model, signature, width, height, transformations,
         resourceClass, transcodeClass, options);
 
+    //wsq 从active的resources获取resource
     EngineResource<?> active = loadFromActiveResources(key, isMemoryCacheable);
     if (active != null) {
       cb.onResourceReady(active, DataSource.MEMORY_CACHE);
@@ -168,6 +170,7 @@ public class Engine implements EngineJobListener,
       return null;
     }
 
+    //wsq 从cache中获取null
     EngineResource<?> cached = loadFromCache(key, isMemoryCacheable);
     if (cached != null) {
       cb.onResourceReady(cached, DataSource.MEMORY_CACHE);
@@ -177,6 +180,7 @@ public class Engine implements EngineJobListener,
       return null;
     }
 
+    //从EngineJob列表中获取job,如果存在则直接拿来使用
     EngineJob<?> current = jobs.get(key);
     if (current != null) {
       current.addCallback(cb);
@@ -186,6 +190,7 @@ public class Engine implements EngineJobListener,
       return new LoadStatus(cb, current);
     }
 
+    //创建新的job
     EngineJob<R> engineJob = engineJobFactory.build(key, isMemoryCacheable,
         useUnlimitedSourceExecutorPool, useAnimationPool);
     DecodeJob<R> decodeJob = decodeJobFactory.build(
@@ -205,8 +210,11 @@ public class Engine implements EngineJobListener,
         onlyRetrieveFromCache,
         options,
         engineJob);
+    //wsq 添加到任务列表
     jobs.put(key, engineJob);
+    //wsq 添加回调接口
     engineJob.addCallback(cb);
+    //wsq 启动任务
     engineJob.start(decodeJob);
 
     if (Log.isLoggable(TAG, Log.VERBOSE)) {

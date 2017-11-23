@@ -425,6 +425,7 @@ public final class SingleRequest<R> implements Request,
    * A callback method that should never be invoked directly.
    */
   @Override
+  //wsq 测量到实际要显示的宽高之后，才开始加载图片
   public void onSizeReady(int width, int height) {
     stateVerifier.throwIfRecycled();
     if (Log.isLoggable(TAG, Log.VERBOSE)) {

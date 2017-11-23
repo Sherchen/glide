@@ -100,6 +100,7 @@ public class RequestTracker {
   /**
    * Starts any not yet completed or failed requests.
    */
+  //wsq 开发者调用pauseRequests之后， isPaused标志位为true, 这个方法会把所有pending的request全部启动
   public void resumeRequests() {
     isPaused = false;
     for (Request request : Util.getSnapshot(requests)) {

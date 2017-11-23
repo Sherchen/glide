@@ -165,6 +165,7 @@ public class Glide implements ComponentCallbacks2 {
     return glide;
   }
 
+  //wsq glide初始化
   private static void checkAndInitializeGlide(Context context) {
     // In the thread running initGlide(), one or more classes may call Glide.get(context).
     // Without this check, those calls could trigger infinite recursion.
@@ -255,6 +256,7 @@ public class Glide implements ComponentCallbacks2 {
     if (annotationGeneratedModule != null) {
       annotationGeneratedModule.applyOptions(applicationContext, builder);
     }
+    //wsq 创建glide实例，并且初始化
     Glide glide = builder.build(applicationContext);
     for (com.bumptech.glide.module.GlideModule module : manifestModules) {
       module.registerComponents(applicationContext, glide, glide.registry);
@@ -295,6 +297,7 @@ public class Glide implements ComponentCallbacks2 {
     return result;
   }
 
+  //wsq 这一步非常重要，初始化工作都是在这里做的
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   Glide(
       Context context,

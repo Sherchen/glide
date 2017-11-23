@@ -52,6 +52,7 @@ class EngineKey implements Key {
     return false;
   }
 
+  //wsq hashcode是会返回哈希值，为哈希表提供寻址方便，在外面这个EngineKey是作为HashMap的key来使用的
   @Override
   public int hashCode() {
     if (hashCode == 0) {

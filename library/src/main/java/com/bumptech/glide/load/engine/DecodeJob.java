@@ -1,6 +1,7 @@
 package com.bumptech.glide.load.engine;
 
 import android.os.Build;
+import android.os.Trace;
 import android.support.annotation.NonNull;
 import android.support.v4.os.TraceCompat;
 import android.support.v4.util.Pools;
@@ -217,6 +218,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
     }
   }
 
+  //wsq GlideExecutor真正启动的方法在这里
   @Override
   public void run() {
     // This should be much more fine grained, but since Java's thread pool implementation silently
@@ -225,6 +227,8 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
     TraceCompat.beginSection("DecodeJob#run");
     // Methods in the try statement can invalidate currentFetcher, so set a local variable here to
     // ensure that the fetcher is cleaned up either way.
+
+    //wsq 使用DataFetcher来获取数据
     DataFetcher<?> localFetcher = currentFetcher;
     try {
       if (isCancelled) {
@@ -305,6 +309,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
       currentGenerator = getNextGenerator();
 
       if (stage == Stage.SOURCE) {
+        //wsq重新开始任务
         reschedule();
         return;
       }
@@ -338,6 +343,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
     isCallbackNotified = true;
   }
 
+  //wsq stage变化 initialize -> RESOURCE_CACHE -> DATA_CACHE -> (ENCODE) ->SOURCE | FINISHED;
   private Stage getNextStage(Stage current) {
     switch (current) {
       case INITIALIZE:
@@ -363,6 +369,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
     callback.reschedule(this);
   }
 
+  //获取资源之后回调
   @Override
   public void onDataFetcherReady(Key sourceKey, Object data, DataFetcher<?> fetcher,
       DataSource dataSource, Key attemptedKey) {
@@ -392,6 +399,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
     exception.setLoggingDetails(attemptedKey, dataSource, fetcher.getDataClass());
     throwables.add(exception);
     if (Thread.currentThread() != currentThread) {
+      //wsq 判断当前线程是否被回收
       runReason = RunReason.SWITCH_TO_SOURCE_SERVICE;
       callback.reschedule(this);
     } else {
@@ -454,6 +462,7 @@ class DecodeJob<R> implements DataFetcherGenerator.FetcherReadyCallback,
         return null;
       }
       long startTime = LogTime.getLogTime();
+      //wsq 获取数据
       Resource<R> result = decodeFromFetcher(data, dataSource);
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
         logWithTimeAndKey("Decoded result " + result, startTime);
